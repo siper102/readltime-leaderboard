@@ -1,0 +1,74 @@
+version: '2.1'
+services:
+  redis:
+    image: redis:6.2-alpine
+    restart: always
+    container_name: redis
+    ports:
+      - '6379:6379'
+    command: redis-server --loglevel warning
+    networks:
+      - realtime-leaderboard
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres-container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pw123
+      - POSTGRES_USER=root
+      - POSTGRES_DB=realtime-game-board
+    networks:
+      - realtime-leaderboard
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - realtime-leaderboard
+
+  # reachable on 9092 from the host and on 29092 from inside docker compose
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+    networks:
+      - realtime-leaderboard
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  # Create kafka topics
+  init-kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    container_name: init-kafka
+    depends_on:
+      - kafka
+    entrypoint: [ '/bin/sh', '-c' ]
+    networks:
+      - realtime-leaderboard
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic game-score --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic leaderboard-change --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic leaderboard --replication-factor 1 --partitions 1
+      
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka:29092 --list
+      "
+networks:
+  realtime-leaderboard:
+    name: realtime-leaderboard-network
