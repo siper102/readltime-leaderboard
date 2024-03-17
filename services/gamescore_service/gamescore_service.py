@@ -34,10 +34,7 @@ class GameScoreService:
             key=game_score_dto.user_id,
             value=game_score_dto,
         )
-        print(
-            f"[GameScoreService] score from user {game_score_dto.user_id} "
-            f"published to {getenv('game_score_topic')}"
-        )
+        print(f"[GameScoreService] published score (uid={game_score_dto.user_id})")
 
     def build_game_score(self) -> GameScoreDto:
         return GameScoreDto(

@@ -51,10 +51,7 @@ class LeaderboardCacheConsumer:
             return
         leader_board_dto = self.map_to_leaderboard_dto(leader_board, current_time_ms)
 
-        print(
-            "[LeaderboardCacheConsumer] Leaderboard updated in redis"
-            " cache for change {leaderboard_change}"
-        )
+        print("[LeaderboardCacheConsumer] Leaderboard updated in redis cache")
         self.redis_obj.set(
             getenv("redis_cache_key"), json.dumps(leader_board_dto).encode("utf-8")
         )
