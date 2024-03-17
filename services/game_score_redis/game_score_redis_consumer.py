@@ -6,19 +6,18 @@ from redis import Redis
 
 
 class GameScoreRedisConsumer:
-    def __init__(self):
-        self.consumer = KafkaConsumer(
-            getenv("game_score_topic"),
-            value_deserializer=json.loads,
-            bootstrap_servers=[getenv("kafka_host")],
-        )
-        self.producer = KafkaProducer(
-            value_serializer=lambda i: str(i).encode("utf-8"),
-            bootstrap_servers=[getenv("kafka_host")],
-        )
-        self.redis_obj = Redis(
-            host=getenv("redis_host"), port=getenv("redis_port"), decode_responses=True
-        )
+    consumer = KafkaConsumer(
+        getenv("game_score_topic"),
+        value_deserializer=json.loads,
+        bootstrap_servers=[getenv("kafka_host")],
+    )
+    producer = KafkaProducer(
+        value_serializer=lambda i: str(i).encode("utf-8"),
+        bootstrap_servers=[getenv("kafka_host")],
+    )
+    redis_obj = Redis(
+        host=getenv("redis_host"), port=getenv("redis_port"), decode_responses=True
+    )
 
     def consume(self):
         for message in self.consumer:

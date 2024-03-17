@@ -7,23 +7,20 @@ from redis import Redis
 
 
 class LeaderboardCacheConsumer:
-    def __init__(
-        self,
-    ):
-        self.consumer = KafkaConsumer(
-            getenv("leaderboard_change_topic"),
-            value_deserializer=lambda d: datetime.fromisoformat(d.decode()).timestamp()
-            * 1000,
-            bootstrap_servers=getenv("kafka_host"),
-        )
-        self.producer = KafkaProducer(
-            value_serializer=lambda v: json.dumps(v).encode("utf-8"),
-            bootstrap_servers=getenv("kafka_host"),
-        )
-        self.redis_obj = Redis(
-            host=getenv("redis_host"), port=getenv("redis_port"), decode_responses=True
-        )
-        self.duration_ms = 500
+    consumer = KafkaConsumer(
+        getenv("leaderboard_change_topic"),
+        value_deserializer=lambda d: datetime.fromisoformat(d.decode()).timestamp()
+        * 1000,
+        bootstrap_servers=getenv("kafka_host"),
+    )
+    producer = KafkaProducer(
+        value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+        bootstrap_servers=getenv("kafka_host"),
+    )
+    redis_obj = Redis(
+        host=getenv("redis_host"), port=getenv("redis_port"), decode_responses=True
+    )
+    duration_ms = 500
 
     def consume(self):
         for message in self.consumer:
