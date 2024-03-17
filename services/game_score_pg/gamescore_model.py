@@ -1,6 +1,7 @@
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Integer, DateTime, BigInteger
 import json
+
+from sqlalchemy import BigInteger, Column, DateTime, Integer
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
@@ -11,9 +12,6 @@ class GameScore(Base):
     user_id = Column(Integer)
     score = Column(Integer)
     created_at = Column(DateTime)
-
-    def __repr__(self):
-        return f"<GameScore(user_id={self.user_id}, score={self.score}, created_at={self.created_at})>"
 
     @staticmethod
     def orm_from_json_string(json_string: str):

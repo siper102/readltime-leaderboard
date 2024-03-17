@@ -1,20 +1,21 @@
-from kafka import KafkaProducer
-from datetime import datetime
-from random import randint
-from .gamescore_dto import GameScoreDto
 import time
+from datetime import datetime
 from os import getenv
+from random import randint
+
+from kafka import KafkaProducer
+
+from .gamescore_dto import GameScoreDto
 
 
 class GameScoreService:
-
-    def __init__(self,sleep_seconds, batch_size):
+    def __init__(self, sleep_seconds, batch_size):
         self.sleep_seconds = sleep_seconds
         self.batch_size = batch_size
         self.producer = KafkaProducer(
             key_serializer=lambda i: str(i).encode("utf-8"),
             value_serializer=lambda d: d.model_dump_json().encode("utf-8"),
-            bootstrap_servers=getenv("kafka_host")
+            bootstrap_servers=getenv("kafka_host"),
         )
 
     def produce(self):
@@ -31,19 +32,16 @@ class GameScoreService:
         self.producer.send(
             topic=getenv("game_score_topic"),
             key=game_score_dto.user_id,
-            value=game_score_dto
+            value=game_score_dto,
         )
         print(
-            f"[GameScoreService] score from user {game_score_dto.user_id} published to {getenv('game_score_topic')}"
+            f"[GameScoreService] score from user {game_score_dto.user_id} "
+            f"published to {getenv('game_score_topic')}"
         )
 
     def build_game_score(self) -> GameScoreDto:
         return GameScoreDto(
             score=randint(a=1, b=100),
             user_id=randint(a=1, b=10),
-            created_at=datetime.now()
+            created_at=datetime.now(),
         )
-
-
-
-

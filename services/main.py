@@ -1,9 +1,10 @@
-from game_score_redis.game_score_redis_consumer import GameScoreRedisConsumer
-from leaderboard_cache_redis.leaderboard_cache_consumer import LeaderboardCacheConsumer
-from gamescore_service.gamescore_service import GameScoreService
-from game_score_pg.game_score_pg_consumer import GameScorePgConsumer
 from threading import Thread
+
 from dotenv import load_dotenv
+from game_score_pg.game_score_pg_consumer import GameScorePgConsumer
+from game_score_redis.game_score_redis_consumer import GameScoreRedisConsumer
+from gamescore_service.gamescore_service import GameScoreService
+from leaderboard_cache_redis.leaderboard_cache_consumer import LeaderboardCacheConsumer
 
 
 def main():
