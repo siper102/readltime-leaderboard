@@ -29,7 +29,7 @@ class LeaderboardCacheConsumer:
 
     def leaderboard_cache_consumer(self, message):
         leaderboard_change = message.value
-        leader_board_cache = self.redis_obj.get(getenv("redis_cache_key"))
+        leader_board_cache = self.redis_obj.get(name=getenv("redis_cache_key"))
         leader_board_cache = (
             json.loads(leader_board_cache) if leader_board_cache else None
         )
@@ -50,7 +50,8 @@ class LeaderboardCacheConsumer:
 
         print("[LeaderboardCacheConsumer] Leaderboard updated in redis cache")
         self.redis_obj.set(
-            getenv("redis_cache_key"), json.dumps(leader_board_dto).encode("utf-8")
+            name=getenv("redis_cache_key"),
+            value=json.dumps(leader_board_dto).encode("utf-8"),
         )
         self.producer.send(topic=getenv("leaderboard_topic"), value=leader_board_dto)
         print("[LeaderboardCacheConsumer] Message sent to leaderboard topic")
