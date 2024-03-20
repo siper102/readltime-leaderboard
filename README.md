@@ -53,7 +53,7 @@ pip install -r requirements.txt
 ```
 Before starting the service the environment variables need to be saved in a .env file.
 Create a file named .env in /services with the following content:
-```.text
+```shell
 db_drivername=postgresql+psycopg2
 db_username=root
 db_password=pw123
@@ -69,7 +69,7 @@ redis_game_score_db=game-score
 redis_cache_key=game-score-cache
 ```
 and one in /controller with content
-```text
+```shell
 kafka_host=localhost
 leaderboard_topic=leaderboard
 ```
