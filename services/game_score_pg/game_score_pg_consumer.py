@@ -1,5 +1,6 @@
 from os import getenv
 
+from dotenv import load_dotenv
 from kafka import KafkaConsumer
 from sqlalchemy import URL, create_engine
 from sqlalchemy.orm import sessionmaker
@@ -10,6 +11,7 @@ from .gamescore_model import Base, GameScore
 
 class GameScorePgConsumer:
     def __init__(self):
+        load_dotenv()
         self.session_maker = self.create_session_maker()
         self.consumer = KafkaConsumer(
             getenv("game_score_topic"),

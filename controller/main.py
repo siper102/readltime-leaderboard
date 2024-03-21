@@ -36,8 +36,8 @@ async def websocket_endpoint(websocket: WebSocket):
             await consumer.start()
             try:
                 async for message in consumer:
-                    print(f"Message {message} received")
-                    await manager.broadcast(message)
+                    print("Message received")
+                    await manager.broadcast(message.value)
             finally:
                 print("Stopping kafka consumer")
                 await consumer.stop()

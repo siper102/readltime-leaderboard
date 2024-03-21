@@ -80,6 +80,6 @@ python services/main.py
 In another shell window start the web service:
 ```shell
 cd controller
-uvicorn main:app --reload --port 8080
+uvicorn main:app --reload
 ```
-Then just visit http://localhost:8080.
+Then just visit http://localhost:8000.

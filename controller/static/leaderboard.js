@@ -29,7 +29,7 @@ function buildTable(data){
     let table = document.getElementById('leaderboardTable');
     table.innerHTML = ""
     for(let i =0; i<data.length; i++){
-        let row = `<tr> <td>${data[i]["rank"]}</td> <td>${data[i]["score"]}</td> <td>${data[i]["nickname"]}</td></tr>`
+        let row = `<tr><td>${data[i]["rank"]}</td><td>${data[i]["score"]}</td><td>${data[i]["nickname"]}</td></tr>`
         table.innerHTML += row;
     }
 }

@@ -2,11 +2,13 @@ import json
 from datetime import datetime
 from os import getenv
 
+from dotenv import load_dotenv
 from kafka import KafkaConsumer, KafkaProducer
 from redis import Redis
 
 
 class LeaderboardCacheConsumer:
+    load_dotenv()
     consumer = KafkaConsumer(
         getenv("leaderboard_change_topic"),
         value_deserializer=lambda d: datetime.fromisoformat(d.decode()).timestamp()

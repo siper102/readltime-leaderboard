@@ -1,6 +1,5 @@
 from threading import Thread
 
-from dotenv import load_dotenv
 from game_score_pg.game_score_pg_consumer import GameScorePgConsumer
 from game_score_redis.game_score_redis_consumer import GameScoreRedisConsumer
 from gamescore_service.gamescore_service import GameScoreService
@@ -25,5 +24,4 @@ def main():
 
 
 if __name__ == "__main__":
-    load_dotenv()
     main()

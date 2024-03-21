@@ -3,6 +3,7 @@ from datetime import datetime
 from os import getenv
 from random import randint
 
+from dotenv import load_dotenv
 from kafka import KafkaProducer
 
 from .gamescore_dto import GameScoreDto
@@ -10,6 +11,7 @@ from .gamescore_dto import GameScoreDto
 
 class GameScoreService:
     def __init__(self, sleep_seconds, batch_size):
+        load_dotenv()
         self.sleep_seconds = sleep_seconds
         self.batch_size = batch_size
         self.producer = KafkaProducer(

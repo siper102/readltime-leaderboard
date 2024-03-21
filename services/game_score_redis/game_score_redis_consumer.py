@@ -1,11 +1,13 @@
 import json
 from os import getenv
 
+from dotenv import load_dotenv
 from kafka import KafkaConsumer, KafkaProducer
 from redis import Redis
 
 
 class GameScoreRedisConsumer:
+    load_dotenv()
     consumer = KafkaConsumer(
         getenv("game_score_topic"),
         value_deserializer=json.loads,
